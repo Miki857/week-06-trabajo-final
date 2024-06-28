@@ -1,5 +1,5 @@
 const catchError = require('../utils/catchError');
-const ProductImgs = require('../Models/ProductImg');
+const ProductImgs = require('../models/ProductImg');
 
 const getAll = catchError(async(req, res) => {
     const results = await ProductImgs.findAll();

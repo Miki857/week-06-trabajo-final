@@ -1,5 +1,6 @@
 const catchError = require('../utils/catchError');
-const Carts = require('../Models/Cart');
+const Carts = require('../models/Cart');
+const User = require('../models/User');
 
 const getAll = catchError(async(req, res) => {
     const results = await Carts.findAll();
@@ -7,7 +8,8 @@ const getAll = catchError(async(req, res) => {
 });
 
 const create = catchError(async(req, res) => {
-    const result = await Carts.create(req.body);
+    const userId = req.user.id;
+    const result = await Carts.create({...req.body, userId: userId});
     return res.status(201).json(result);
 });
 
@@ -27,6 +29,8 @@ const remove = catchError(async(req, res) => {
 
 const update = catchError(async(req, res) => {
     const { id } = req.params;
+    delete req.body.userId;
+    delete req.body.productId;
     const result = await Carts.update(
         req.body,
         { where: {id}, returning: true }

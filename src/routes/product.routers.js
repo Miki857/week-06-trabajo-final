@@ -1,15 +1,18 @@
-const { getAll, create, getOne, remove, update } = require('../controllers/product.controllers');
+const { getAll, create, getOne, remove, update, setImages } = require('../controllers/product.controllers');
 const express = require('express');
 
 const routerProducts = express.Router();
 
 routerProducts.route('/')
     .get(getAll)
-    .post(create);
+    .post(create);//PROTECTED
+
+routerProducts.route('/:id/images')
+    .post(setImages)//PROTECTED
 
 routerProducts.route('/:id')
-    .get(getOne)
+    .get(getOne)//PROTECTED
     .delete(remove)
-    .put(update);
+    .put(update);//PROTECTED
 
 module.exports = routerProducts;
