@@ -2,13 +2,16 @@ const request = require('supertest');
 const app = require('../app');
 
 const BASE_URL = '/api/v1/users';
-let TOKEN;
 
 let user;
 let userId;
 let userToken;
 
 beforeAll(async () => {
+});
+
+//CREATE:
+test("POST -> 'BASE_URL', should return statusCode 201, and res.body.firstname === user.firstName", async () => {
     user = {
         firstName: "Jesus",
         lastName: "Carrasquilla",
@@ -17,20 +20,6 @@ beforeAll(async () => {
         phone: "+00 123456789"
     }
 
-    const body = {
-        email: "pepito@gmail.com",
-        password: "pepito"
-    }
-
-    const res = await request(app)
-        .post(`${BASE_URL}/login`)
-        .send(body);
-
-    TOKEN = res.body.token;
-});
-
-//CREATE TEST:
-test("POST -> 'BASE_URL', should return statusCode 201, and res.body.firstname === user.firstName", async () => {
     const res = await request(app)
         .post(BASE_URL)
         .send(user);
@@ -47,16 +36,17 @@ test("POST -> 'BASE_URL', should return statusCode 201, and res.body.firstname =
     expect(res.body.firstName).toBe(user.firstName);
 });
 
-//GET USER WITH TOKEN TEST:
+//GET ALL WITH TOKEN:
 test("GET -> 'BASE_URL', should return status code 200, and res.body.length === 2", async () => {
     const res = await request(app)
         .get(BASE_URL)
-        .send('Authorization', `Bearer ${TOKEN}`)
-
+        .set('Authorization', `Bearer ${userToken}`);
+        
     expect(res.status).toBe(200);
+    expect(res.body.length).toBe(2);
 });
 
-//GET ONE TEST:
+//GET ONE:
 test("Get -> 'BASE_URL/:id', should return status code 200, res.body.name === user.name", async () => {
     const res = await request(app)
       .get(`${BASE_URL}/${userId}`)// El de id 1 es el que creamos para el GET WITH TOKEN.
@@ -67,7 +57,7 @@ test("Get -> 'BASE_URL/:id', should return status code 200, res.body.name === us
     expect(res.body.name).toBe(user.name);
 });
   
-//UPDATE TEST:
+//UPDATE:
 test("Put -> 'BASE_URL/:id', should return status code 200, res.body.name === user.name ", async () => {
     const userUpdate = {
         firstName: "Pedro"
@@ -83,7 +73,7 @@ test("Put -> 'BASE_URL/:id', should return status code 200, res.body.name === us
     expect(res.body.name).toBe(userUpdate.name);
 });
 
-//DELETE TEST:
+//DELETE:
 test("Delete -> 'BASE_URL/:id', should return status code 204 ", async () => {
     const res = await request(app)
         .delete(`${BASE_URL}/${userId}`)

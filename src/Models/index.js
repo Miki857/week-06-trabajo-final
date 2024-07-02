@@ -1,18 +1,30 @@
 const Carts = require("./Cart");
 const Categories = require("./Categorie");
-const ProductImgs = require("./ProductImg");
+const ProductImg = require("./ProductImg");
 const Products = require("./Product");
 const Purchases = require("./Purchase");
 const User = require("./User");
 
-User.hasMany(Products);
-Products.hasMany(User);
+//Product -> categoryId
+Products.belongsTo(Categories);
+Categories.hasMany(Products);
 
+//Cart -> userId
+Carts.belongsTo(User);
+User.hasMany(Carts);
 
+//Cart -> productId
+Carts.belongsTo(Products);
+Products.hasMany(Carts);
 
-// Products.belongsTo(Categories);
+//Purchase -> userId
+Purchases.belongsTo(User);
+User.hasMany(Purchases);
 
-// ProductImgs.belongsTo(Products);
+//Purchase -> productId
+Purchases.belongsTo(Products);
+Products.hasMany(Purchases);
 
-// Categories.belongsToMany(Products, {through: Purchases});
-// Products.belongsToMany(Categories, {through: Purchases});
+//ProductImg -> productId
+ProductImg.belongsTo(Products);
+Products.hasMany(ProductImg);

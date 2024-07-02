@@ -16,6 +16,7 @@ const ProductImgs = sequelize.define('productimg', {
         type: DataTypes.STRING,
         allowNull: false
     }
+    //productId
 });
 
 module.exports = ProductImgs;

@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const Products = require('../models/Product');
 
 const getAll = catchError(async(req, res) => {
-    const results = await User.findAll({include: [Products]});
+    const results = await User.findAll();
     return res.json(results);
 });
 
